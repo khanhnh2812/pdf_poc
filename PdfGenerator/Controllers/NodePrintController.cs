@@ -24,7 +24,7 @@ namespace PdfGenerator.Controllers
     public async Task<IActionResult> Print()
     {
       var result = await _workerService.pdf();
-      return File(result, "application/pdf", $"Invoice-1.pdf");
+      return File(result, "application/pdf", "Invoice-1.pdf");
     }
   }
 }

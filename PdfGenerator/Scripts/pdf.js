@@ -1,8 +1,5 @@
 module.exports = function (callback) {
-  const path = require("path");
-  var jsreport = require("@jsreport/jsreport-core")({
-    templatingEngines: {},
-    rootDirectory: path.join(__dirname, "../../"),
+  const jsreport = require("@jsreport/jsreport-core")({
     templatingEngines: {
       allowedModules: "*",
     },
@@ -10,10 +7,24 @@ module.exports = function (callback) {
   });
   jsreport.use(require("@jsreport/jsreport-chrome-pdf")());
   jsreport.use(require("@jsreport/jsreport-handlebars")());
+  const data = require("./mock-data");
 
-  var html = require("./mock");
-  var data = require("./mock-data");
-  var helpers = require("./helpers");
+  const fs = require("fs");
+  const path = require("path");
+  const parsePath = (str) => path.join(__dirname, str);
+  const helpers = fs.readFileSync(parsePath("./helpers.js")).toString();
+  const html = fs.readFileSync(parsePath("./mock.html")).toString();
+
+  const asset = `
+    function asset(url, type) {
+      if (type === "dataURI") 
+        return path.join(
+          '${__dirname.replaceAll("\\", "/")}',
+          url
+        );
+      return;
+    }
+  `;
 
   jsreport
     .init()
@@ -24,7 +35,7 @@ module.exports = function (callback) {
             content: html,
             engine: "handlebars",
             recipe: "chrome-pdf",
-            helpers: helpers,
+            helpers: asset + helpers,
           },
           data: data,
         })
