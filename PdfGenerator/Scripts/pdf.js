@@ -1,4 +1,4 @@
-module.exports = function (callback) {
+module.exports = function (callback, code) {
   const jsreport = require("@jsreport/jsreport-core")({
     templatingEngines: {
       allowedModules: "*",
@@ -8,6 +8,8 @@ module.exports = function (callback) {
   jsreport.use(require("@jsreport/jsreport-chrome-pdf")());
   jsreport.use(require("@jsreport/jsreport-handlebars")());
   const data = require("./mock-data");
+
+  data.ticket.code = code || data.ticket.code;
 
   const fs = require("fs");
   const path = require("path");

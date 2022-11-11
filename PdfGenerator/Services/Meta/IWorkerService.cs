@@ -5,6 +5,6 @@ namespace PdfGenerator.Services.Meta
 {
   public interface IWorkerService
   {
-    Task<Byte[]> pdf();
+    Task<Byte[]> pdf(string code);
   }
 }

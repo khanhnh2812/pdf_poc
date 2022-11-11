@@ -23,10 +23,10 @@ namespace PdfGenerator.Services
       _scriptFolder = scriptFolder;
     }
 
-    public async Task<Byte[]> pdf()
+    public async Task<Byte[]> pdf(string code)
     {
       string path = Path.Combine(_scriptFolder, "./Scripts/pdf");
-      var result = await _nodeServices.InvokeAsync<Byte[]>(path);
+      var result = await _nodeServices.InvokeAsync<Byte[]>(path, code);
       return result;
     }
   }
